@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import {
-  Send, Sparkles, User, RotateCcw,
+  Send, User, RotateCcw,
   Lightbulb, Leaf, Briefcase, Building2, Info, ArrowRight,
 } from 'lucide-react'
+import { LissaLogo } from '../components/LissaLogo'
 import {
   generateLissaResponse,
   SUGGESTED_PROMPTS,
@@ -68,10 +69,10 @@ const RESPONSE_SECTIONS = [
 
 function LissaAvatar({ size = 'md' }) {
   const dim = size === 'sm' ? 'w-7 h-7' : 'w-8 h-8'
-  const icon = size === 'sm' ? 13 : 15
+  const logoSize = size === 'sm' ? 26 : 30
   return (
-    <div className={`${dim} rounded-full bg-[#e2231a] flex items-center justify-center flex-shrink-0`}>
-      <Sparkles size={icon} className="text-white" />
+    <div className={`${dim} rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center flex-shrink-0`}>
+      <LissaLogo size={logoSize} />
     </div>
   )
 }
@@ -317,8 +318,8 @@ export default function Lissa() {
         <div className="max-w-3xl mx-auto">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#e2231a] flex items-center justify-center flex-shrink-0">
-                <Sparkles size={18} className="text-white" />
+              <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                <LissaLogo size={40} />
               </div>
               <div>
                 <div className="flex items-center gap-2">

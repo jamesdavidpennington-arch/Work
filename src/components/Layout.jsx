@@ -7,8 +7,9 @@ import {
   Leaf,
   ChevronRight,
   FileDown,
-  Sparkles,
 } from 'lucide-react'
+import { LissaIcon } from './LissaLogo'
+import { FloatingLissa } from './FloatingLissa'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Overview', icon: LayoutDashboard },
@@ -29,6 +30,7 @@ export default function Layout({ children }) {
         <Topbar />
         <MainContent>{children}</MainContent>
       </div>
+      <FloatingLissa />
     </div>
   )
 }
@@ -63,7 +65,7 @@ function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        <SidebarLink to="/lissa" label="LISSA" icon={Sparkles} highlight />
+        <SidebarLink to="/lissa" label="LISSA" icon={LissaIcon} highlight />
         <div className="pt-3 pb-1.5">
           <div className="h-px bg-gray-100" />
         </div>
