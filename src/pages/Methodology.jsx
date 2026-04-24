@@ -1,8 +1,9 @@
 import {
   Database, Globe2, Recycle, Layers, BarChart3, Factory,
-  Truck, Zap, Trash2, GitBranch, Info, CheckCircle2,
+  Truck, Zap, Trash2, GitBranch, Info, CheckCircle2, RefreshCw,
 } from 'lucide-react'
 import { Card } from '../components/ui'
+import { DEPRECIATION_CURVE, CONDITION_MULTIPLIERS, CATEGORY_MODIFIERS } from '../lib/arsCalculator'
 
 export default function Methodology() {
   return (
@@ -102,6 +103,73 @@ export default function Methodology() {
           to enterprise customers — deferring or eliminating a new manufacturing cycle can reduce per-device
           emissions by up to 40–60% depending on the product category.
         </p>
+      </Section>
+
+      <Section icon={RefreshCw} title="Potential ARS Value — Asset Recovery Estimate">
+        <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3.5 py-3 mb-4">
+          <Info size={13} className="text-amber-600 flex-shrink-0 mt-0.5" />
+          <p className="text-[12.5px] text-amber-800">
+            <strong>Demo estimate only.</strong> The Potential ARS Value shown on the Overview Dashboard is illustrative
+            and does not constitute a commercial quote or formal Lenovo ARS valuation.
+          </p>
+        </div>
+        <p>
+          The <strong>Potential ARS Value</strong> KPI provides an indicative estimate of the recoverable commercial value
+          of a customer's eligible fleet through{' '}
+          <strong>Lenovo Asset Recovery Services (ARS)</strong>. It is calculated entirely client-side from mock
+          data using a simplified depreciation model, and is intended to demonstrate how circular-economy insights
+          could sit alongside carbon reporting in a production version of this portal.
+        </p>
+
+        <p className="mt-3 font-medium text-gray-700">Calculation formula:</p>
+        <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 font-mono text-[12.5px] text-gray-800 my-3 text-center">
+          ARS Value = Original Unit Price × Quantity × Depreciation Factor × Condition Multiplier × Category Modifier
+        </div>
+
+        <p className="font-medium text-gray-700 mt-4 mb-2">Mock depreciation curve (by device age):</p>
+        <div className="rounded-lg border border-gray-100 overflow-hidden mb-4">
+          <table className="w-full text-[12px]">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-100">
+                <th className="px-4 py-2 text-left font-semibold text-gray-500">Age Band</th>
+                <th className="px-4 py-2 text-right font-semibold text-gray-500">Base Residual %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {DEPRECIATION_CURVE.map((band, i) => (
+                <tr key={band.label} className={`border-b border-gray-50 ${i % 2 === 1 ? 'bg-gray-50/40' : ''}`}>
+                  <td className="px-4 py-2 text-gray-700">{band.label}</td>
+                  <td className="px-4 py-2 text-right font-semibold text-gray-800">{(band.residual * 100).toFixed(0)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <p className="font-medium text-gray-700 mb-2">Condition multipliers:</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {Object.entries(CONDITION_MULTIPLIERS).map(([grade, mult]) => (
+            <span key={grade} className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-[12px] font-medium text-gray-700">
+              {grade.charAt(0).toUpperCase() + grade.slice(1)}: ×{mult}
+            </span>
+          ))}
+        </div>
+
+        <p className="font-medium text-gray-700 mb-2">Category modifiers:</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {Object.entries(CATEGORY_MODIFIERS).map(([cat, mod]) => (
+            <span key={cat} className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-[12px] font-medium text-gray-700">
+              {cat}: ×{mod}
+            </span>
+          ))}
+        </div>
+
+        <ul className="space-y-2 text-[13px] text-gray-600">
+          <Li>Device age is calculated relative to a fixed demo reference date (April 2026).</Li>
+          <Li>Only devices marked <code className="bg-gray-100 px-1.5 py-0.5 rounded text-[12px] font-mono">arsEligible = true</code> in the data model are included in the total. Accessories are excluded.</Li>
+          <Li>A real ARS valuation would use Lenovo's proprietary business rules, grading assessments, and current secondary-market pricing.</Li>
+          <Li>The <code className="bg-gray-100 px-1.5 py-0.5 rounded text-[12px] font-mono">originalUnitPrice</code>, <code className="bg-gray-100 px-1.5 py-0.5 rounded text-[12px] font-mono">conditionGrade</code>, and <code className="bg-gray-100 px-1.5 py-0.5 rounded text-[12px] font-mono">arsEligible</code> fields on each device record are designed to be populated by a future data integration.</Li>
+        </ul>
       </Section>
 
       <Section icon={Info} title="Reporting Date Basis">

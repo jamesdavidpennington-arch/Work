@@ -96,6 +96,77 @@ function buildRecord(id, overrides) {
   }
 }
 
+// ── ARS (Asset Recovery Services) data overlay ───────────────────────────────
+// originalUnitPrice is in GBP. conditionGrade reflects physical state as of
+// the demo reference date (April 2026). arsEligible excludes low-value
+// accessories where recovery economics are not commercially meaningful.
+// Condition assignment: New devices purchased 2023 Q1–Q2 → fair (37–42 months
+// old); Q3–Q4 2023 and 2024 H1 → good; 2024 H2 → excellent. Refurbished → fair.
+
+const ARS_META = {
+  //  id: { originalUnitPrice (GBP), conditionGrade, arsEligible }
+  1:  { originalUnitPrice: 1450, conditionGrade: 'fair',      arsEligible: true  },
+  2:  { originalUnitPrice:  980, conditionGrade: 'fair',      arsEligible: true  },
+  3:  { originalUnitPrice:  720, conditionGrade: 'fair',      arsEligible: true  },
+  4:  { originalUnitPrice:  850, conditionGrade: 'fair',      arsEligible: true  },
+  5:  { originalUnitPrice: 2400, conditionGrade: 'fair',      arsEligible: true  },
+  6:  { originalUnitPrice:  580, conditionGrade: 'fair',      arsEligible: true  },
+  7:  { originalUnitPrice: 1450, conditionGrade: 'good',      arsEligible: true  },
+  8:  { originalUnitPrice:  980, conditionGrade: 'fair',      arsEligible: true  }, // Refurbished
+  9:  { originalUnitPrice:  780, conditionGrade: 'fair',      arsEligible: true  },
+  10: { originalUnitPrice:  680, conditionGrade: 'good',      arsEligible: true  },
+  11: { originalUnitPrice:  680, conditionGrade: 'fair',      arsEligible: true  },
+  12: { originalUnitPrice:  680, conditionGrade: 'good',      arsEligible: true  },
+  13: { originalUnitPrice: 1150, conditionGrade: 'good',      arsEligible: true  },
+  14: { originalUnitPrice: 1900, conditionGrade: 'fair',      arsEligible: true  },
+  15: { originalUnitPrice:  720, conditionGrade: 'good',      arsEligible: true  },
+  16: { originalUnitPrice: 1450, conditionGrade: 'fair',      arsEligible: true  }, // Refurbished
+  17: { originalUnitPrice:  380, conditionGrade: 'fair',      arsEligible: true  },
+  18: { originalUnitPrice:  980, conditionGrade: 'good',      arsEligible: true  },
+  19: { originalUnitPrice:  850, conditionGrade: 'good',      arsEligible: true  },
+  20: { originalUnitPrice: 1450, conditionGrade: 'good',      arsEligible: true  },
+  21: { originalUnitPrice:  980, conditionGrade: 'good',      arsEligible: true  },
+  22: { originalUnitPrice:  780, conditionGrade: 'good',      arsEligible: true  },
+  23: { originalUnitPrice:  580, conditionGrade: 'good',      arsEligible: true  },
+  24: { originalUnitPrice: 1450, conditionGrade: 'good',      arsEligible: true  },
+  25: { originalUnitPrice: 2400, conditionGrade: 'fair',      arsEligible: true  },
+  26: { originalUnitPrice: 1450, conditionGrade: 'good',      arsEligible: true  },
+  27: { originalUnitPrice:  980, conditionGrade: 'good',      arsEligible: true  },
+  28: { originalUnitPrice:  850, conditionGrade: 'good',      arsEligible: true  },
+  29: { originalUnitPrice:  580, conditionGrade: 'good',      arsEligible: true  },
+  30: { originalUnitPrice:  720, conditionGrade: 'good',      arsEligible: true  },
+  31: { originalUnitPrice:  780, conditionGrade: 'fair',      arsEligible: true  }, // Refurbished
+  32: { originalUnitPrice: 2400, conditionGrade: 'good',      arsEligible: true  },
+  33: { originalUnitPrice: 1150, conditionGrade: 'good',      arsEligible: true  },
+  34: { originalUnitPrice:  680, conditionGrade: 'good',      arsEligible: true  },
+  35: { originalUnitPrice:  980, conditionGrade: 'good',      arsEligible: true  },
+  36: { originalUnitPrice:  680, conditionGrade: 'good',      arsEligible: true  },
+  37: { originalUnitPrice: 1450, conditionGrade: 'good',      arsEligible: true  },
+  38: { originalUnitPrice:  380, conditionGrade: 'good',      arsEligible: true  },
+  39: { originalUnitPrice:  720, conditionGrade: 'good',      arsEligible: true  },
+  40: { originalUnitPrice: 1900, conditionGrade: 'good',      arsEligible: true  },
+  41: { originalUnitPrice: 1450, conditionGrade: 'fair',      arsEligible: true  }, // Refurbished
+  42: { originalUnitPrice:  980, conditionGrade: 'good',      arsEligible: true  },
+  43: { originalUnitPrice:  580, conditionGrade: 'excellent', arsEligible: true  },
+  44: { originalUnitPrice:  780, conditionGrade: 'good',      arsEligible: true  },
+  45: { originalUnitPrice:  680, conditionGrade: 'excellent', arsEligible: true  },
+  46: { originalUnitPrice:   85, conditionGrade: 'good',      arsEligible: false }, // Accessories — not eligible
+  47: { originalUnitPrice:   65, conditionGrade: 'good',      arsEligible: false }, // Accessories — not eligible
+  48: { originalUnitPrice: 1450, conditionGrade: 'good',      arsEligible: true  },
+  49: { originalUnitPrice:  850, conditionGrade: 'good',      arsEligible: true  },
+  50: { originalUnitPrice:  720, conditionGrade: 'fair',      arsEligible: true  }, // Refurbished
+  51: { originalUnitPrice: 1450, conditionGrade: 'excellent', arsEligible: true  },
+  52: { originalUnitPrice:  980, conditionGrade: 'excellent', arsEligible: true  },
+  53: { originalUnitPrice: 2400, conditionGrade: 'excellent', arsEligible: true  },
+  54: { originalUnitPrice:  680, conditionGrade: 'excellent', arsEligible: true  },
+  55: { originalUnitPrice:  780, conditionGrade: 'excellent', arsEligible: true  },
+  56: { originalUnitPrice:  720, conditionGrade: 'fair',      arsEligible: true  }, // Refurbished
+  57: { originalUnitPrice:  850, conditionGrade: 'excellent', arsEligible: true  },
+  58: { originalUnitPrice: 1150, conditionGrade: 'excellent', arsEligible: true  },
+  59: { originalUnitPrice:  380, conditionGrade: 'excellent', arsEligible: true  },
+  60: { originalUnitPrice: 1450, conditionGrade: 'excellent', arsEligible: true  },
+}
+
 export const devices = [
   buildRecord(1,  { productFamily: 'ThinkPad X1', model: 'ThinkPad X1 Carbon Gen 11', quantity: 120, shippingCountry: 'United States', purchaseDate: '2023-03-15', condition: 'New' }),
   buildRecord(2,  { productFamily: 'ThinkPad T', model: 'ThinkPad T14s Gen 4', quantity: 85, shippingCountry: 'Germany', purchaseDate: '2023-04-02', condition: 'New' }),
@@ -160,7 +231,8 @@ export const devices = [
   buildRecord(58, { productFamily: 'ThinkPad X12', model: 'ThinkPad X12 Detachable Gen 1', quantity: 40, shippingCountry: 'Singapore', purchaseDate: '2024-11-01', condition: 'New' }),
   buildRecord(59, { productFamily: 'ThinkVision', model: 'ThinkVision S27i-30', quantity: 85, shippingCountry: 'Australia', purchaseDate: '2024-12-05', condition: 'New' }),
   buildRecord(60, { productFamily: 'ThinkPad X1', model: 'ThinkPad X1 Carbon Gen 11', quantity: 70, shippingCountry: 'Japan', purchaseDate: '2024-12-15', condition: 'New' }),
-]
+// Merge ARS fields into each record
+].map(d => ({ ...d, ...(ARS_META[d.id] ?? { originalUnitPrice: 0, conditionGrade: 'good', arsEligible: false }) }))
 
 // ── Derived aggregations ─────────────────────────────────────────────────────
 
