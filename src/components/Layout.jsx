@@ -6,12 +6,17 @@ import {
   BookOpen,
   Leaf,
   ChevronRight,
+  FileDown,
 } from 'lucide-react'
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Overview', icon: LayoutDashboard, exact: true },
+  { to: '/', label: 'Overview', icon: LayoutDashboard },
   { to: '/devices', label: 'Devices', icon: Monitor },
   { to: '/geography', label: 'Geography', icon: Globe2 },
+]
+
+const NAV_ITEMS_SECONDARY = [
+  { to: '/exports', label: 'Exports', icon: FileDown },
   { to: '/methodology', label: 'Methodology', icon: BookOpen },
 ]
 
@@ -49,6 +54,10 @@ function Sidebar() {
       <nav className="flex-1 px-3 py-4 space-y-0.5">
         <p className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Analytics</p>
         {NAV_ITEMS.map(item => (
+          <SidebarLink key={item.to} {...item} />
+        ))}
+        <p className="px-3 pt-4 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Reporting</p>
+        {NAV_ITEMS_SECONDARY.map(item => (
           <SidebarLink key={item.to} {...item} />
         ))}
       </nav>
@@ -99,6 +108,7 @@ function Topbar() {
     '/': 'Overview Dashboard',
     '/devices': 'Device Inventory',
     '/geography': 'Geographic Analysis',
+    '/exports': 'Framework Exports',
     '/methodology': 'Methodology',
   }[location.pathname] || 'Carbon Impact Portal'
 
