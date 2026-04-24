@@ -284,62 +284,56 @@ function ARSCard({ summary, onOpenDetail }) {
   return (
     <div
       onClick={onOpenDetail}
-      className="group relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 rounded-xl border border-emerald-700/40 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-200 overflow-hidden"
+      className="group bg-white rounded-xl border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 overflow-hidden"
     >
-      {/* Subtle texture overlay */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none"
-        style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, #fff 0%, transparent 60%)' }} />
-
-      <div className="relative px-6 py-5 flex flex-col lg:flex-row lg:items-center gap-5">
+      <div className="px-5 py-5 flex flex-col lg:flex-row lg:items-center gap-5">
         {/* Left: icon + headline metric */}
         <div className="flex items-start gap-4 flex-1">
-          <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0">
-            <RefreshCw size={20} className="text-emerald-300" />
+          <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+            <RefreshCw size={15} className="text-emerald-600" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-widest">
-                Potential ARS Value
-              </span>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-[10px] font-bold text-amber-300 uppercase tracking-wider">
+              <p className="text-[12px] font-medium text-gray-500 uppercase tracking-wider">Potential ARS Value</p>
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-[10px] font-semibold text-amber-700 uppercase tracking-wider">
                 Demo Estimate
               </span>
             </div>
-            <div className="mt-1 flex items-baseline gap-2">
-              <span className="text-[34px] font-extrabold text-white leading-none tracking-tight">
+            <div className="mt-2 flex items-baseline gap-1.5">
+              <span className="text-[26px] font-bold leading-none tracking-tight text-emerald-600">
                 {arsFormatted}
               </span>
             </div>
-            <p className="text-[12.5px] text-emerald-200/80 mt-1">
-              Estimated fleet recovery value
+            <p className="text-[12px] text-gray-400 mt-1.5">
+              Estimated recoverable value across {formatNumber(summary.eligibleUnitCount)} eligible devices
             </p>
           </div>
         </div>
 
         {/* Center: key stats */}
-        <div className="flex gap-6 lg:gap-8 lg:border-l lg:border-r border-white/10 lg:px-8">
+        <div className="flex gap-6 lg:gap-8 lg:border-l lg:border-r border-gray-100 lg:px-8">
           <div>
-            <p className="text-[10.5px] font-semibold text-emerald-400 uppercase tracking-wider">Eligible Devices</p>
-            <p className="text-[20px] font-bold text-white mt-0.5">{formatNumber(summary.eligibleUnitCount)}</p>
-            <p className="text-[11px] text-emerald-300/60">of {formatNumber(summary.totalUnitCount)} total</p>
+            <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Eligible Devices</p>
+            <p className="text-[20px] font-bold text-gray-900 mt-0.5">{formatNumber(summary.eligibleUnitCount)}</p>
+            <p className="text-[11px] text-gray-400">of {formatNumber(summary.totalUnitCount)} total</p>
           </div>
           <div>
-            <p className="text-[10.5px] font-semibold text-emerald-400 uppercase tracking-wider">Avg Residual</p>
-            <p className="text-[20px] font-bold text-white mt-0.5">{summary.avgResidualPct}%</p>
-            <p className="text-[11px] text-emerald-300/60">of original value</p>
+            <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Avg Residual</p>
+            <p className="text-[20px] font-bold text-gray-900 mt-0.5">{summary.avgResidualPct}%</p>
+            <p className="text-[11px] text-gray-400">of original value</p>
           </div>
           <div>
-            <p className="text-[10.5px] font-semibold text-emerald-400 uppercase tracking-wider">Top Category</p>
-            <p className="text-[20px] font-bold text-white mt-0.5 truncate max-w-[100px]">
+            <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Top Category</p>
+            <p className="text-[20px] font-bold text-gray-900 mt-0.5 truncate max-w-[100px]">
               {summary.byCategory[0]?.category ?? '—'}
             </p>
-            <p className="text-[11px] text-emerald-300/60">by recovery value</p>
+            <p className="text-[11px] text-gray-400">by recovery value</p>
           </div>
         </div>
 
         {/* Right: description + CTA */}
         <div className="flex flex-col gap-3 lg:w-56 flex-shrink-0">
-          <p className="text-[11.5px] text-emerald-200/70 leading-relaxed">
+          <p className="text-[11.5px] text-gray-400 leading-relaxed">
             Demo estimate based on mock depreciation curves, original device values, age, and condition.
           </p>
           <div className="flex flex-col gap-2">
@@ -348,14 +342,14 @@ function ARSCard({ summary, onOpenDetail }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={e => e.stopPropagation()}
-              className="flex items-center gap-1.5 text-[12px] font-semibold text-emerald-300 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 text-[12px] font-semibold text-emerald-600 hover:text-emerald-800 transition-colors"
             >
               <ExternalLink size={12} />
               Find out more about ARS
             </a>
             <button
               onClick={onOpenDetail}
-              className="flex items-center gap-1.5 text-[12px] font-medium text-emerald-400/70 hover:text-emerald-200 transition-colors"
+              className="flex items-center gap-1.5 text-[12px] font-medium text-gray-400 hover:text-gray-700 transition-colors"
             >
               <TrendingUp size={12} />
               View breakdown
@@ -366,9 +360,9 @@ function ARSCard({ summary, onOpenDetail }) {
       </div>
 
       {/* Bottom disclaimer strip */}
-      <div className="relative px-6 py-2.5 border-t border-white/10 bg-black/10 flex items-center gap-2">
-        <Info size={11} className="text-emerald-400/60 flex-shrink-0" />
-        <p className="text-[10.5px] text-emerald-300/50">
+      <div className="px-5 py-2.5 border-t border-gray-50 bg-gray-50/60 flex items-center gap-2">
+        <Info size={11} className="text-gray-300 flex-shrink-0" />
+        <p className="text-[10.5px] text-gray-400">
           Potential ARS Value is a demo estimate based on sample depreciation logic and mock fleet data. It is illustrative only and not a commercial quote.
         </p>
       </div>

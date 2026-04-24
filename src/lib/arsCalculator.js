@@ -19,11 +19,11 @@ const REFERENCE_DATE = new Date('2026-04-01')
  * Represents the fraction of original purchase value recoverable through ARS.
  */
 export const DEPRECIATION_CURVE = [
-  { label: '0–12 months',  maxMonths: 12, residual: 0.45 },
-  { label: '13–24 months', maxMonths: 24, residual: 0.30 },
-  { label: '25–36 months', maxMonths: 36, residual: 0.18 },
-  { label: '37–48 months', maxMonths: 48, residual: 0.10 },
-  { label: '49+ months',   maxMonths: Infinity, residual: 0.04 },
+  { label: '0–12 months',  maxMonths: 12,       residual: 0.80 },
+  { label: '13–24 months', maxMonths: 24,       residual: 0.65 },
+  { label: '25–36 months', maxMonths: 36,       residual: 0.50 },
+  { label: '37–48 months', maxMonths: 48,       residual: 0.30 },
+  { label: '49+ months',   maxMonths: Infinity, residual: 0.15 },
 ]
 
 export const CONDITION_MULTIPLIERS = {
