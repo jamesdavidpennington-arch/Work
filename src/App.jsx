@@ -5,6 +5,7 @@ import Devices from './pages/Devices'
 import Geography from './pages/Geography'
 import Exports from './pages/Exports'
 import Methodology from './pages/Methodology'
+import Lissa from './pages/Lissa'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/geography" element={<Geography />} />
           <Route path="/exports" element={<Exports />} />
           <Route path="/methodology" element={<Methodology />} />
+          <Route path="/lissa" element={<Lissa />} />
         </Routes>
       </Layout>
     </BrowserRouter>

@@ -7,6 +7,7 @@ import {
   Leaf,
   ChevronRight,
   FileDown,
+  Sparkles,
 } from 'lucide-react'
 
 const NAV_ITEMS = [
@@ -26,11 +27,21 @@ export default function Layout({ children }) {
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
         <Topbar />
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8">
-          {children}
-        </main>
+        <MainContent>{children}</MainContent>
       </div>
     </div>
+  )
+}
+
+// Strips padding and disables outer scroll for the LISSA chat page so the
+// chat interface can manage its own full-height flex layout.
+function MainContent({ children }) {
+  const { pathname } = useLocation()
+  const isChat = pathname === '/lissa'
+  return (
+    <main className={`flex-1 ${isChat ? 'overflow-hidden' : 'overflow-y-auto p-6 lg:p-8'}`}>
+      {children}
+    </main>
   )
 }
 
@@ -56,10 +67,17 @@ function Sidebar() {
         {NAV_ITEMS.map(item => (
           <SidebarLink key={item.to} {...item} />
         ))}
+
         <p className="px-3 pt-4 pb-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Reporting</p>
         {NAV_ITEMS_SECONDARY.map(item => (
           <SidebarLink key={item.to} {...item} />
         ))}
+
+        {/* LISSA — distinct visual section for the AI advisor */}
+        <div className="pt-4 pb-1.5">
+          <div className="h-px bg-gray-100 mb-3" />
+          <SidebarLink to="/lissa" label="LISSA" icon={Sparkles} highlight />
+        </div>
       </nav>
 
       {/* Footer */}
@@ -78,22 +96,38 @@ function Sidebar() {
   )
 }
 
-function SidebarLink({ to, label, icon: Icon }) {
+function SidebarLink({ to, label, icon: Icon, highlight }) {
   return (
     <NavLink
       to={to}
       end={to === '/'}
-      className={({ isActive }) =>
-        `flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium transition-all ${
+      className={({ isActive }) => {
+        if (highlight) {
+          return `flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-semibold transition-all ${
+            isActive
+              ? 'bg-red-50 text-[#e2231a]'
+              : 'text-gray-700 hover:bg-gray-50 hover:text-[#e2231a]'
+          }`
+        }
+        return `flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium transition-all ${
           isActive
             ? 'bg-red-50 text-[#e2231a]'
             : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
         }`
-      }
+      }}
     >
       {({ isActive }) => (
         <>
-          <Icon size={16} className={isActive ? 'text-[#e2231a]' : 'text-gray-400'} />
+          <Icon
+            size={16}
+            className={
+              isActive
+                ? 'text-[#e2231a]'
+                : highlight
+                  ? 'text-gray-500'
+                  : 'text-gray-400'
+            }
+          />
           <span>{label}</span>
           {isActive && <ChevronRight size={14} className="ml-auto text-[#e2231a] opacity-60" />}
         </>
@@ -105,11 +139,12 @@ function SidebarLink({ to, label, icon: Icon }) {
 function Topbar() {
   const location = useLocation()
   const pageTitle = {
-    '/': 'Overview Dashboard',
-    '/devices': 'Device Inventory',
-    '/geography': 'Geographic Analysis',
-    '/exports': 'Framework Exports',
+    '/':            'Overview Dashboard',
+    '/devices':     'Device Inventory',
+    '/geography':   'Geographic Analysis',
+    '/exports':     'Framework Exports',
     '/methodology': 'Methodology',
+    '/lissa':       'LISSA — Sustainability & Solutions Advisor',
   }[location.pathname] || 'Carbon Impact Portal'
 
   return (
@@ -119,7 +154,7 @@ function Topbar() {
       </div>
       <div className="flex items-center gap-3">
         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-[11px] font-semibold text-amber-700 uppercase tracking-wider">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
           Demo Environment
         </span>
         <div className="h-4 w-px bg-gray-200" />
