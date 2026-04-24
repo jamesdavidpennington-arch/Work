@@ -63,6 +63,11 @@ function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
+        <SidebarLink to="/lissa" label="LISSA" icon={Sparkles} highlight />
+        <div className="pt-3 pb-1.5">
+          <div className="h-px bg-gray-100" />
+        </div>
+
         <p className="px-3 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Analytics</p>
         {NAV_ITEMS.map(item => (
           <SidebarLink key={item.to} {...item} />
@@ -72,12 +77,6 @@ function Sidebar() {
         {NAV_ITEMS_SECONDARY.map(item => (
           <SidebarLink key={item.to} {...item} />
         ))}
-
-        {/* LISSA — distinct visual section for the AI advisor */}
-        <div className="pt-4 pb-1.5">
-          <div className="h-px bg-gray-100 mb-3" />
-          <SidebarLink to="/lissa" label="LISSA" icon={Sparkles} highlight />
-        </div>
       </nav>
 
       {/* Footer */}
