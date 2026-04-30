@@ -12,6 +12,7 @@ import {
   getTotalEmissions, getTotalDevices, getRefurbishedCount,
   getCountries, getEmissionsByReportingCountry, getEmissionsByCategory,
   getEmissionsByLifecycleStage, getEmissionsByGHGScope, getEmissionsByQuarter,
+  getEmissionsByOffsetType,
 } from '../data/mockData'
 import {
   getARSSummary, formatGBP, DEPRECIATION_CURVE,
@@ -22,6 +23,7 @@ import { Card, CardHeader, Stat, formatNumber, formatEmissions } from '../compon
 const PALETTE = ['#e2231a', '#1e40af', '#059669', '#d97706', '#7c3aed', '#0891b2', '#be185d']
 const LIFECYCLE_COLORS = { Manufacturing: '#e2231a', 'Use Phase': '#1e40af', Transport: '#059669', 'End of Life': '#9ca3af' }
 const SCOPE_COLORS = { 'Scope 3': '#e2231a', 'Scope 2': '#1e40af', 'Scope 1': '#059669' }
+const OFFSET_COLORS = { 'No Offsets': '#9ca3af', 'Avoidance': '#059669', 'Removals': '#0891b2' }
 
 // ── Static derivations (computed once at module load) ─────────────────────────
 
@@ -36,6 +38,7 @@ const categoryData = getEmissionsByCategory()
 const lifecycleData = getEmissionsByLifecycleStage()
 const scopeData = getEmissionsByGHGScope()
 const quarterData = getEmissionsByQuarter()
+const offsetData = getEmissionsByOffsetType()
 
 const refurbShare = ((refurbCount / totalDevices) * 100).toFixed(1)
 const topCountry = countryData[0]
@@ -62,7 +65,8 @@ function EmissionsTooltip({ active, payload }) {
     payload[0].payload.category ||
     payload[0].payload.stage ||
     payload[0].payload.scope ||
-    payload[0].payload.period || ''
+    payload[0].payload.period ||
+    payload[0].payload.label || ''
   return (
     <div className="bg-white border border-gray-100 shadow-lg rounded-lg px-3.5 py-2.5 text-[12px]">
       <p className="font-semibold text-gray-800 mb-0.5">{name}</p>
@@ -180,8 +184,8 @@ export default function Dashboard() {
         </div>
       </Card>
 
-      {/* Category + Lifecycle + Scope */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      {/* Category + Lifecycle + Scope + Offsets */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
         <Card>
           <CardHeader title="By Product Category" subtitle="Total kg CO₂e" />
           <div className="px-5 py-4">
@@ -259,6 +263,40 @@ export default function Dashboard() {
                     </div>
                     <span className="font-semibold text-gray-800">
                       {value} <span className="text-gray-400 font-normal">{unit}</span>
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </Card>
+
+        <Card>
+          <CardHeader title="Offsets" subtitle="Breakdown by offset type" />
+          <div className="px-5 py-5">
+            <ResponsiveContainer width="100%" height={180}>
+              <PieChart>
+                <Pie data={offsetData} dataKey="emissions" nameKey="label"
+                  cx="50%" cy="50%" innerRadius={52} outerRadius={78} paddingAngle={3}>
+                  {offsetData.map(entry => (
+                    <Cell key={entry.label} fill={OFFSET_COLORS[entry.label] || '#ccc'} />
+                  ))}
+                </Pie>
+                <Tooltip content={<EmissionsTooltip />} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="mt-2 space-y-1.5">
+              {offsetData.map(d => {
+                const tonnes = d.emissions / 1000
+                const formatted = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(tonnes)
+                return (
+                  <div key={d.label} className="flex items-center justify-between text-[12px]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-sm" style={{ background: OFFSET_COLORS[d.label] }} />
+                      <span className="text-gray-600">{d.label}</span>
+                    </div>
+                    <span className="font-semibold text-gray-800">
+                      {formatted} <span className="text-gray-400 font-normal">tCO₂e</span>
                     </span>
                   </div>
                 )

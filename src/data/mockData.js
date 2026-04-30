@@ -96,6 +96,17 @@ function buildRecord(id, overrides) {
   }
 }
 
+// ── Carbon offset type + PCF link ────────────────────────────────────────────
+// Distribution: ~10% blank (rem 5), ~30% removals (rem 4,8,9), ~60% avoidance (rest)
+const PCF_LINK = 'https://p2-ofp.static.pub/ShareResource/compliance/eco-declaration/pdfs/Batch7/pcf-thinkpad-t14-gen-3-intel-r2022.pdf'
+
+function getOffsetType(id) {
+  const rem = id % 10
+  if (rem === 5) return ''
+  if (rem === 4 || rem === 8 || rem === 9) return 'removals'
+  return 'avoidance'
+}
+
 // ── ARS (Asset Recovery Services) data overlay ───────────────────────────────
 // originalUnitPrice is in GBP. conditionGrade reflects physical state as of
 // the demo reference date (April 2026). arsEligible excludes low-value
@@ -232,7 +243,12 @@ export const devices = [
   buildRecord(59, { productFamily: 'ThinkVision', model: 'ThinkVision S27i-30', quantity: 85, shippingCountry: 'Australia', purchaseDate: '2024-12-05', condition: 'New' }),
   buildRecord(60, { productFamily: 'ThinkPad X1', model: 'ThinkPad X1 Carbon Gen 11', quantity: 70, shippingCountry: 'Japan', purchaseDate: '2024-12-15', condition: 'New' }),
 // Merge ARS fields into each record
-].map(d => ({ ...d, ...(ARS_META[d.id] ?? { originalUnitPrice: 0, conditionGrade: 'good', arsEligible: false }) }))
+].map(d => ({
+  ...d,
+  ...(ARS_META[d.id] ?? { originalUnitPrice: 0, conditionGrade: 'good', arsEligible: false }),
+  carbon_offset_type: getOffsetType(d.id),
+  pcf_link: PCF_LINK,
+}))
 
 // ── Derived aggregations ─────────────────────────────────────────────────────
 
@@ -341,4 +357,16 @@ export function getCountryComparisonData() {
       hasOverride: shippingMap[country] !== reportingMap[country],
     }))
     .sort((a, b) => b.reportingEmissions - a.reportingEmissions)
+}
+
+export function getEmissionsByOffsetType() {
+  const map = { '': 0, avoidance: 0, removals: 0 }
+  devices.forEach(d => {
+    map[d.carbon_offset_type] = (map[d.carbon_offset_type] || 0) + d.emissionsTotal
+  })
+  return [
+    { label: 'No Offsets', emissions: map[''] },
+    { label: 'Avoidance', emissions: map.avoidance },
+    { label: 'Removals', emissions: map.removals },
+  ]
 }

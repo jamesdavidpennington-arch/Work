@@ -151,6 +151,7 @@ export default function Devices() {
                 <Th label="Purchase Date" field="purchaseDate" sortField={sortField} sortDir={sortDir} onSort={handleSort} />
                 <Th label="Total Emissions" field="emissionsTotal" sortField={sortField} sortDir={sortDir} onSort={handleSort} align="right" />
                 <th className="px-4 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Lifecycle Split</th>
+                <th className="px-4 py-3 text-right text-[11px] font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">PCF</th>
               </tr>
             </thead>
             <tbody>
@@ -259,6 +260,17 @@ function DeviceRow({ device: d, striped }) {
       </td>
       <td className="px-4 py-3">
         <LifecycleBar mfg={mfgPct} use={usePct} trn={trnPct} eol={eolPct} />
+      </td>
+      <td className="px-4 py-3 text-right">
+        <a
+          href={d.pcf_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11.5px] font-medium text-gray-600 hover:text-[#e2231a] hover:bg-red-50 border border-gray-200 hover:border-red-200 transition-colors whitespace-nowrap"
+        >
+          <Download size={11} />
+          Download PCF
+        </a>
       </td>
     </tr>
   )
